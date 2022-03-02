@@ -95,13 +95,14 @@ class TableStructurer(object):
         res_loc = post_result['res_loc']
         imgh, imgw = ori_im.shape[0:2]
         res_loc_final = []
+        # 设定单元格位置
         for rno in range(len(res_loc[0])):
             x0, y0, x1, y1 = res_loc[0][rno]
             left = max(int(imgw * x0), 0)
             top = max(int(imgh * y0), 0)
             right = min(int(imgw * x1), imgw - 1)
             bottom = min(int(imgh * y1), imgh - 1)
-            res_loc_final.append([left, top, right, bottom])
+            res_loc_final.append([left, top, right, bottom])  # 返回单元格坐标
 
         structure_str_list = structure_str_list[0][:-1]
         structure_str_list = ['<html>', '<body>', '<table>'] + structure_str_list + ['</table>', '</body>', '</html>']
