@@ -21,6 +21,7 @@ import os
 import argparse
 parser = argparse.ArgumentParser(description="args for paddleserving")
 parser.add_argument("--image_dir", type=str, default="../../doc/imgs/")
+# parser.add_argument("--image_dir", type=str, default="11.jpg")
 args = parser.parse_args()
 
 
@@ -28,7 +29,9 @@ def cv2_to_base64(image):
     return base64.b64encode(image).decode('utf8')
 
 
-url = "http://127.0.0.1:9998/ocr/prediction"
+# url = "http://127.0.0.1:9998/ocr/prediction"
+url = "http://106.12.20.62:9292/ocr/prediction"
+# python pipeline_http_client.py
 test_img_dir = args.image_dir
 
 for idx, img_file in enumerate(os.listdir(test_img_dir)):
@@ -36,10 +39,12 @@ for idx, img_file in enumerate(os.listdir(test_img_dir)):
         image_data1 = file.read()
 
     image = cv2_to_base64(image_data1)
-
+    print("转换")
     for i in range(1):
         data = {"key": ["image"], "value": [image]}
         r = requests.post(url=url, data=json.dumps(data))
+        print("收到回复")
         print(r.json())
 
 print("==> total number of test imgs: ", len(os.listdir(test_img_dir)))
+print("hhh")
