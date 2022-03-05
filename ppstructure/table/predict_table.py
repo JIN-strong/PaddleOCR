@@ -58,7 +58,7 @@ class TableSystem(object):
         self.text_recognizer = predict_rec.TextRecognizer(args) if text_recognizer is None else text_recognizer
         self.table_structurer = predict_strture.TableStructurer(args)
 
-    def __call__(self, img):
+    def __call__(self, img):  # 可调用对象属性
         ori_im = img.copy()
         structure_res, elapse = self.table_structurer(copy.deepcopy(img))
         dt_boxes, elapse = self.text_detector(copy.deepcopy(img))
@@ -93,8 +93,8 @@ class TableSystem(object):
         return pred_html
 
     def rebuild_table(self, structure_res, dt_boxes, rec_res):
-        pred_structures, pred_bboxes = structure_res
-        matched_index = self.match_result(dt_boxes, pred_bboxes)
+        pred_structures, pred_bboxes = structure_res  # pred_structures, pred_bboxes分别是表结构html和表单元格坐标
+        matched_index = self.match_result(dt_boxes, pred_bboxes)  # 匹配文字检测框和单元格框
         pred_html, pred = self.get_pred_html(pred_structures, matched_index, rec_res)
         return pred_html, pred
 
@@ -114,6 +114,10 @@ class TableSystem(object):
             else:
                 matched[distances.index(sorted_distances[0])].append(i)
         return matched
+
+# TO DO LIST
+#
+#
 
     def get_pred_html(self, pred_structures, matched_index, ocr_contents):
         end_html = []
@@ -182,7 +186,7 @@ def main(args):
     image_file_list = image_file_list[args.process_id::args.total_process_num]
     os.makedirs(args.output, exist_ok=True)
 
-    text_sys = TableSystem(args)
+    text_sys = TableSystem(args) # 预测
     img_num = len(image_file_list)
     for i, image_file in enumerate(image_file_list):
         logger.info("[{}/{}] {}".format(i, img_num, image_file))
